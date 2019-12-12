@@ -1,4 +1,15 @@
+
+
 # ml_front
+
+## using ( just plan now )
+front : vue, axios 
+back  : flask 
+ml    : scikit-learn, pytorch 
+db    : mongodb 
+
+<img alt="ml_platform" width="250px" src="./src/assets/ml_platform.png">
+
 
 ## Project setup
 ```
