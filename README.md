@@ -8,7 +8,7 @@ back  : flask
 ml    : scikit-learn, pytorch  
 db    : mongodb  
 
-<img alt="ml_platform" width="250px" src="./src/assets/ml_platform.png">
+<img alt="ml_platform" width="500px" src="./src/assets/ml_platform.png">
 
 
 ## Project setup
