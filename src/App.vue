@@ -1,9 +1,13 @@
 <template>
   <div id="ml_front">
 
-  
+    <div class="ai_icon">
+    <img width="150px" src="@/assets/ai_group_logo.png">
+    </div>
 
-    <div class="main">
+
+    <div class="container">
+   
     <div class="input">
       <p>実験条件選択</p>
       <select v-model="selected_condition">
@@ -14,6 +18,10 @@
       </select>
                 <p>{{selected_condition}}</p>
 
+
+      <img width="300px" src="@/assets/train/1_ng/2016-08-08_06-55-44-7290_0.jpg">
+      <img width="300px" src="@/assets/train/1_ng/2016-08-10_12-53-59-8100_0.jpg">
+      <p>ng samples</p>
       
       <p>学習，評価データ</p>
       <button v-on:click="get_exp_data(exp_data)">get experimental information</button>
@@ -62,18 +70,61 @@
     </div>
 
     <div class="result">
+      
+
       <p>result</p>
 
       <ul>
         <li>reration between epoch and loss</li>
         <li>confusion matrix</li>
+        <button v-on:click="get_exp_result(exp_res)">experimental result</button>
+        <table>
+        <tr>
+          <th></th>
+          <th>ng</th>
+          <th>ok</th>
+        </tr>
+        <tr>
+          <th>ng</th>
+          <td>{{exp_res.tp}}</td>
+          <td>{{exp_res.fn}}</td>
+        </tr>
+        <tr>
+          <th>ok</th>
+          <td>{{exp_res.fp}}</td>
+          <td>{{exp_res.tn}}</td>
+        </tr>
+      </table>
+
+
+      <table>
+        <tr>
+          <td>Accuracy</td>
+          <td>{{exp_res.acc}} %</td>
+        </tr>
+        <tr>
+          <td>Recall</td>
+          <td>{{exp_res.rec}} %</td>
+        </tr>
+        <tr>
+          <td>Precision</td>
+          <td>{{exp_res.prec}} %</td>
+        </tr>
+        <tr>
+          <td>Recall</td>
+          <td>{{exp_res.rec}} %</td>
+        </tr>
+      </table>
+
+
+
         <li>acc, recall, prescision, f1-score</li>
         <li>histogram</li>
         <li>roc</li>
       </ul>
     </div>
 
-    <div class="result">
+    <div class="server">
       <p>server information<br>local developing now</p>
       
     
@@ -92,16 +143,22 @@
       <img alt="ml_platform" width="500px" src="./assets/ml_platform.png">
     </div>
 
+  
+
   </div>
 </template>
 
+
+
 <script>
 
+// import fs from 'fs';
 
 export default {
   name: 'app',
   data : function() {
     return {
+      img_lists : [],
       selected_condition: '',
       conditions: [
           { id: 1, name: 'train:tokushima1, test:tokushima2' },
@@ -119,6 +176,8 @@ export default {
       ],
     counter : 0,
     exp_data : { train_ok : 0, train_ng : 0,test_ok : 0, test_ng : 0}, // important to write like this for Object assign
+    exp_res : { tp : 0, fp : 0, fn : 0, tn : 0 ,
+                 acc:0, rec:0, prec:0, f1:0}
     }
   },
   methods : {
@@ -130,33 +189,20 @@ export default {
 
       });
     },
+    get_exp_result (exp_res) {
+      this.axios.get('http://localhost:5000/get_exp_result/').then( res => {
+        Object.assign(exp_res,res.data )
+        console.log( exp_res ) 
+      });
+    }
   }
 }
 </script>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
+
 #ml_front {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -176,50 +222,86 @@ body {
   /* background-color : #888888; */
 }
 
+.ai_icon{
+  margin-top : 10px;
+  background-color:white;
+}
+
+
 .flow_img{
   margin-top : 100px;
   background-color:white;
 }
 
-.main {
+.ng_imgs{
+  margin : 10px;
+}
+
+.container {
   display: block;
-  margin-top:5%;
+  margin-top:30px;
   margin-left: auto;
   margin-right: auto;
   padding : 5px;
   width: 40%;
-  border : solid 1px #000;
-  color: #111;
+  /* border : solid 1px #000; */
+  background : #eee;
+  /* color: #eee; */
   /* width : 50%; */
   text-align :center;
+  box-shadow: 0 0 8px gray;
 }
 
+.container > * {
+  margin : 5% 2% 0 2%;
+  /* margin : 5% 1%; */
+  padding : 1%;
+  box-shadow: 0 0 8px gray;
+  background:#fff;
+  color : #111;
+}
+/* 
 .input {
   margin : 1%;
   border : solid 1px #000;
+  background:#fff;
   color : #111;
 }
 
 .select_method{
-  margin : 1%;
-  border : solid 1px #000;
+  margin : 5% 1%;
+  padding : 1%;
+  box-shadow: 0 0 8px gray;
+  background:#fff;
   color : #111;
-}
-.main li {
+} */
+.container li {
   text-align :left;
 }
-
+/* 
 .result{
   margin : 1%;
+  background:#fff;
   border : solid 1px #000;
   color : #111;
-}
+} */
 
 .server {
-   margin : 1%;
+ margin-bottom : 5%
+  /* margin : 1%;
+  background:#fff;
   border : solid 1px #000;
-  color : #111;
+  color : #111; */
 }
+
+table {
+  margin-left:auto; 
+  margin-right:auto;
+  margin : 30px auto;
+  padding:5px; 
+  border :solid 1px #000
+}
+
 
 th td {
   padding : 5px;
