@@ -45,8 +45,6 @@
 
     <ul>
         <li>reration between epoch and loss</li>
-        <li>confusion matrix</li>
-        <li>acc, recall, prescision, f1-score</li>
         <li>histogram</li>
         <li>roc</li>
     </ul>
@@ -54,6 +52,10 @@
 </template>
 
 <script>
+
+import store from '@/store.js'
+
+
 export default {
     name: 'Result',
     props: {
@@ -68,7 +70,10 @@ export default {
     },
     methods : {
         get_exp_result (exp_res) {
-            this.axios.get('http://localhost:5000/get_exp_result/').then( res => {
+            this.axios.get('http://localhost:5000/get_exp_result/',{
+                params : { condition : 1} // 実験条件をrequestで送る．
+            }).then( res => {
+                console.log(store.state.count)
                 Object.assign(exp_res,res.data )
                 console.log( exp_res ) 
             });
@@ -80,6 +85,10 @@ export default {
 
 <style scoped>
 
+.Result {
+    margin-bottom : 20px;
+}
+
 table {
   margin-left:auto; 
   margin-right:auto;
@@ -90,3 +99,4 @@ table {
 
 
 </style>
+

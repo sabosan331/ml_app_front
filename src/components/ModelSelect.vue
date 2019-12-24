@@ -10,7 +10,7 @@
           </option>
       </select>
        <p>{{ selected_model}}</p>
-      <ul>
+      <!-- <ul>
 
 
         <li>dl or statistic ml</li>
@@ -21,7 +21,9 @@
         <li>learning rate</li>
         <li>and so on</li>
         <li>start !!!</li>
-      </ul>
+      </ul> -->
+       <button v-on:click="get_exp_result">training start !!!</button>
+
     </div>  
     
   </div>
@@ -68,3 +70,4 @@ table {
 
 
 </style>
+
